@@ -102,7 +102,7 @@ export const Hero: React.FC<{ currentThemeIndex: number }> = ({ currentThemeInde
           
           <div className="flex items-center justify-center lg:justify-start gap-10 pt-8">
             <div className="flex flex-col items-center lg:items-start">
-               <span className="text-byte-cyan font-black text-2xl drop-shadow-[0_0_10px_rgba(0,240,255,0.4)]">+30+</span>
+               <span className="text-byte-cyan font-black text-2xl drop-shadow-[0_0_10px_rgba(0,240,255,0.4)]">30+</span>
                <span className="text-[11px] text-gray-300 font-tech uppercase tracking-[0.1em] font-bold">Usuários</span>
             </div>
             <div className="h-12 w-px bg-white/20"></div>
