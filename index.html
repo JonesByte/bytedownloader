@@ -1,0 +1,116 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Byte Downloader - Baixe em 4K/8K Sem Limites</title>
+    <link rel="icon" type="image/x-icon" href="/logos/byte-download-48px.ico">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              byte: {
+                navy: '#050C16', 
+                purple: '#6200EA', 
+                purpleLight: '#7B2CBF',
+                cyan: '#00F0FF', 
+                dark: '#020609',
+                surface: '#0F2547', 
+                highlight: '#CCFF00' 
+              }
+            },
+            fontFamily: {
+              sans: ['Montserrat', 'sans-serif'],
+              tech: ['Orbitron', 'sans-serif'],
+            },
+            animation: {
+              'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+              'float': 'float 6s ease-in-out infinite',
+              'glow': 'glow 2s ease-in-out infinite alternate',
+            },
+            keyframes: {
+              float: {
+                '0%, 100%': { transform: 'translateY(0)' },
+                '50%': { transform: 'translateY(-20px)' },
+              },
+              glow: {
+                '0%': { boxShadow: '0 0 5px #6200EA, 0 0 10px #6200EA' },
+                '100%': { boxShadow: '0 0 20px #6200EA, 0 0 30px #00F0FF' }
+              }
+            },
+            backgroundImage: {
+              'byte-gradient': 'linear-gradient(to bottom right, #050C16, #0F2547)',
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      body {
+        background-color: #050C16;
+        color: #ffffff;
+        overflow-x: hidden;
+        scroll-behavior: smooth;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeLegibility;
+      }
+      ::-webkit-scrollbar {
+        width: 10px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #050C16;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #6200EA;
+        border-radius: 5px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #00F0FF;
+      }
+      .glass-panel {
+        background: rgba(15, 37, 71, 0.85);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      .neon-text {
+        text-shadow: 0 0 2px rgba(0, 240, 255, 0.8), 0 0 8px rgba(98, 0, 234, 0.5);
+        color: #fff;
+        font-weight: 900;
+        letter-spacing: -0.02em;
+      }
+      .text-sharp {
+        transform: translateZ(0);
+        backface-visibility: hidden;
+        -webkit-font-smoothing: subpixel-antialiased;
+      }
+      .btn-glow:hover {
+        box-shadow: 0 0 25px rgba(0, 240, 255, 0.7);
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.31.0",
+    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.556.0",
+    "framer-motion": "https://aistudiocdn.com/framer-motion@^11.11.11",
+    "clsx": "https://aistudiocdn.com/clsx@^2.1.1",
+    "tailwind-merge": "https://aistudiocdn.com/tailwind-merge@^2.5.4",
+    "react/": "https://aistudiocdn.com/react@^19.2.1/",
+    "react": "https://aistudiocdn.com/react@^19.2.1",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.1/"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body>
+    <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>

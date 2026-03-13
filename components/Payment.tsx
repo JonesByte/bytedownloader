@@ -1,0 +1,121 @@
+
+import React, { useRef } from 'react';
+import { PAYMENT_LINK, PRICE_ORIGINAL, PRICE_PROMO } from '../constants';
+import { CheckCircle, Lock, Zap, ShieldCheck, Ticket } from 'lucide-react';
+import { motion, useScroll, useTransform } from 'framer-motion';
+
+export const Payment: React.FC = () => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start end", "end start"]
+  });
+
+  const y = useTransform(scrollYProgress, [0, 1], [100, -100]);
+
+  return (
+    <section id="pricing" ref={containerRef} className="py-24 bg-byte-gradient relative overflow-hidden">
+      {/* Background glow */}
+      <motion.div 
+        style={{ y }}
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl h-full max-h-[500px] bg-byte-purple/20 blur-[120px] rounded-full"
+      ></motion.div>
+
+      <div className="container mx-auto px-6 relative z-10">
+        <motion.div 
+          initial={{ opacity: 0, y: 60 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-50px" }}
+          transition={{ duration: 1.2, ease: [0.2, 1, 0.3, 1] }}
+          className="max-w-5xl mx-auto glass-panel rounded-3xl border border-byte-purple/40 overflow-hidden shadow-[0_0_60px_rgba(124,58,237,0.2)]"
+        >
+          <div className="grid md:grid-cols-2">
+            
+            {/* Left Side: Pitch */}
+            <div className="p-10 md:p-14 flex flex-col justify-between bg-[#081221]">
+              <div>
+                <h3 className="text-sm font-tech text-byte-cyan tracking-widest mb-4 font-bold">OFERTA POR TEMPO LIMITADO</h3>
+                <h2 className="text-3xl md:text-4xl font-bold text-white mb-6 leading-tight">
+                  Entre para a família <span className="text-byte-purple">Byte</span> de uma vez por todas.
+                </h2>
+                <p className="text-gray-400 mb-8 leading-relaxed">
+                  Diferente de outros que te cobram todo ano, sua licença financia nossa equipe para manter o código sempre um passo à frente.
+                </p>
+                
+                <ul className="space-y-4">
+                  {[
+                    "Downloads Ilimitados em 8K",
+                    "Acesso ao Motor de IA Upscale",
+                    "Atualizações Automáticas Vitalícias",
+                    "Suporte Prioritário",
+                    "Download Imediato via Hotmart"
+                  ].map((item, i) => (
+                    <li key={i} className="flex items-center gap-3 text-gray-200 font-medium">
+                      <CheckCircle className="text-byte-highlight min-w-[20px]" size={20} />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              
+              <div className="mt-10 pt-8 border-t border-white/10 flex items-center gap-3">
+                <ShieldCheck className="text-byte-cyan" />
+                <div className="text-sm text-gray-400">
+                  <span className="text-white font-bold">Garantia de 7 Dias.</span> Satisfação ou seu dinheiro de volta.
+                </div>
+              </div>
+            </div>
+
+            {/* Right Side: Pricing Action */}
+            <div className="p-10 md:p-14 bg-gradient-to-br from-byte-purple to-[#4c1d95] flex flex-col justify-center items-center text-center relative overflow-hidden">
+               {/* Pattern overlay */}
+               <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20"></div>
+               
+               <div className="relative z-10 w-full">
+                 <div className="inline-block bg-white/20 backdrop-blur-md text-white text-xs font-bold px-3 py-1 rounded-full mb-6 border border-white/20">
+                   CUPOM DE 25% APLICADO
+                 </div>
+                 
+                 <div className="mb-2 text-white/60 line-through text-xl font-medium">De R$ {PRICE_ORIGINAL.display}</div>
+                 
+                 <div className="text-6xl font-black text-byte-highlight mb-2 drop-shadow-lg tracking-tight">
+                   <span className="text-3xl align-top">R$</span>{Math.floor(PRICE_PROMO)}<span className="text-3xl">,{(PRICE_PROMO % 1).toFixed(2).substring(2)}</span>
+                 </div>
+                 
+                 <div className="text-white/90 font-medium mb-8">Pagamento Único • Licença Vitalícia</div>
+
+                 <a 
+                   href={PAYMENT_LINK}
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   className="w-full block py-5 px-8 bg-byte-highlight hover:bg-white text-byte-navy font-black text-xl rounded-xl shadow-[0_10px_30px_rgba(0,0,0,0.3)] transform hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-3 group mb-6"
+                 >
+                   <Zap className="fill-current group-hover:scale-110 transition-transform" />
+                   GARANTIR
+                 </a>
+                 
+                 <div className="bg-white/10 border border-white/20 rounded-xl p-4 mb-6 backdrop-blur-sm">
+                   <p className="text-xs text-white/90 flex flex-col items-center justify-center gap-2">
+                     <span className="flex items-center gap-1 font-bold text-byte-highlight">
+                       <Ticket size={14} /> Tem outro cupom de desconto?
+                     </span>
+                     <span className="text-center">Acesse a compra para digitá-lo diretamente na página segura da Hotmart.</span>
+                   </p>
+                 </div>
+                 
+                 <div className="mt-6 flex flex-col items-center gap-2">
+                   <div className="text-xs text-white/70 flex items-center gap-1">
+                     <Lock size={12} /> Pagamento Seguro via Pix ou Cartão
+                   </div>
+                   <p className="text-[10px] text-white/50 max-w-xs leading-tight">
+                     *O download do instalador é liberado na Hotmart logo após o pagamento. As atualizações futuras são baixadas e instaladas automaticamente pelo próprio programa.
+                   </p>
+                 </div>
+               </div>
+            </div>
+          </div>
+        </motion.div>
+      </div>
+    </section>
+  );
+};
