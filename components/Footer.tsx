@@ -32,7 +32,7 @@ export const Footer: React.FC = () => {
           
           <div className="text-center md:text-left">
             <img 
-              src="/bytedownloader/logos/bd-logo-expand.png"  <---- A CORREÇÃO
+              src="/bytedownloader/logos/bd-logo-expand.png"
               alt="Byte Downloader Logo" 
               className="h-14 w-auto object-contain mb-4 mx-auto md:mx-0"
               referrerPolicy="no-referrer"
