@@ -336,7 +336,7 @@ export const Showcase: React.FC<{ currentThemeIndex: number, setCurrentThemeInde
 
           {/* Main Display Window */}
           <div 
-            className="relative bg-[#050C16] rounded-[2.5rem] overflow-hidden shadow-[0_40px_100px_-20px_rgba(0,0,0,0.9)] border border-white/10 group-hover:border-byte-cyan/30 transition-colors duration-500 cursor-pointer aspect-video min-h-[400px]"
+            className="relative w-full aspect-video bg-[#050C16] rounded-[2.5rem] overflow-hidden shadow-[0_40px_100px_-20px_rgba(0,0,0,0.9)] border border-white/10 group-hover:border-byte-cyan/30 transition-colors duration-500 cursor-pointer"
             onClick={toggleFullScreen}
           >
             <AnimatePresence mode="wait">
@@ -354,13 +354,13 @@ export const Showcase: React.FC<{ currentThemeIndex: number, setCurrentThemeInde
               ) : (
                 <motion.img 
                   key={currentScreenshots[currentIndex].id}
-                  initial={{ opacity: 0, scale: 0.98 }}
+                  initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 1.02 }}
-                  transition={{ duration: 0.5, ease: "easeOut" }}
+                  exit={{ opacity: 0, scale: 1.05 }}
+                  transition={{ duration: 0.4, ease: "easeOut" }}
                   src={currentScreenshots[currentIndex].url} 
                   alt={currentScreenshots[currentIndex].caption} 
-                  className="w-full h-full object-cover block absolute inset-0"
+                  className="w-full h-full object-contain p-4 md:p-8 block absolute inset-0"
                   onError={() => handleImageError(currentIndex)}
                 />
               )}
