@@ -336,17 +336,17 @@ export const Showcase: React.FC<{ currentThemeIndex: number, setCurrentThemeInde
 
           {/* Main Display Window */}
           <div 
-            className="relative w-full aspect-video bg-[#050C16] rounded-[2.5rem] overflow-hidden shadow-[0_40px_100px_-20px_rgba(0,0,0,0.9)] border border-white/10 group-hover:border-byte-cyan/30 transition-colors duration-500 cursor-pointer"
+            className="relative w-full aspect-video bg-[#050C16] rounded-2xl overflow-hidden shadow-[0_40px_100px_-20px_rgba(0,0,0,0.9)] border border-white/10 group-hover:border-byte-cyan/30 transition-colors duration-500 cursor-pointer"
             onClick={toggleFullScreen}
           >
-            <AnimatePresence mode="wait">
-              {/* Se a imagem falhar, mostramos a simulação visual que criamos acima */}
+            <AnimatePresence>
               {imageErrors[currentScreenshots[currentIndex].id] ? (
                  <motion.div 
                     key="sim" 
                     initial={{ opacity: 0 }} 
                     animate={{ opacity: 1 }} 
                     exit={{ opacity: 0 }} 
+                    transition={{ duration: 0.3 }}
                     className="w-full h-full absolute inset-0 overflow-y-auto"
                  >
                     <UISimulation index={currentIndex} />
@@ -354,13 +354,13 @@ export const Showcase: React.FC<{ currentThemeIndex: number, setCurrentThemeInde
               ) : (
                 <motion.img 
                   key={currentScreenshots[currentIndex].id}
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 1.05 }}
-                  transition={{ duration: 0.4, ease: "easeOut" }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.4, ease: "easeInOut" }}
                   src={currentScreenshots[currentIndex].url} 
                   alt={currentScreenshots[currentIndex].caption} 
-                  className="w-full h-full object-contain p-4 md:p-8 block absolute inset-0"
+                  className="w-full h-full object-cover block absolute inset-0"
                   onError={() => handleImageError(currentIndex)}
                 />
               )}
