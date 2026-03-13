@@ -13,10 +13,23 @@ import { ComparisonTable } from './components/ComparisonTable';
 import { FAQ } from './components/FAQ';
 import { BackgroundMusic } from './components/BackgroundMusic';
 import { SplashScreen } from './components/SplashScreen';
+import { THEMES } from './constants'; // <-- Importação dos temas adicionada aqui
 
 const App: React.FC = () => {
   const [currentThemeIndex, setCurrentThemeIndex] = useState(0);
   const [showSplash, setShowSplash] = useState(true);
+
+  // --- O PRÉ-CARREGADOR FANTASMA ---
+  // Baixa todas as imagens da vitrine em segundo plano enquanto a Splash Screen está na tela
+  useEffect(() => {
+    THEMES.forEach((theme) => {
+      theme.screenshots.forEach((shot) => {
+        const img = new Image();
+        img.src = shot.url;
+      });
+    });
+  }, []);
+  // ---------------------------------
 
   useEffect(() => {
     const lenis = new Lenis({
