@@ -88,7 +88,7 @@ export const BackgroundMusic: React.FC = () => {
     <>
       <audio
         ref={audioRef}
-        src="/bytedownloader/musica.mp3"  <---- A CORREÇÃO DE MESTRE
+        src="/bytedownloader/musica.mp3"
         preload="auto"
         // Removed loop: will stop only when the file ends
         onCanPlay={handleCanPlay}
