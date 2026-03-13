@@ -336,7 +336,7 @@ export const Showcase: React.FC<{ currentThemeIndex: number, setCurrentThemeInde
 
           {/* Main Display Window */}
           <div 
-            className="relative bg-[#050C16] rounded-[2.5rem] overflow-hidden shadow-[0_40px_100px_-20px_rgba(0,0,0,0.9)] border border-white/10 group-hover:border-byte-cyan/30 transition-colors duration-500 cursor-pointer"
+            className="relative bg-[#050C16] rounded-[2.5rem] overflow-hidden shadow-[0_40px_100px_-20px_rgba(0,0,0,0.9)] border border-white/10 group-hover:border-byte-cyan/30 transition-colors duration-500 cursor-pointer aspect-video min-h-[400px]"
             onClick={toggleFullScreen}
           >
             <AnimatePresence mode="wait">
@@ -347,7 +347,7 @@ export const Showcase: React.FC<{ currentThemeIndex: number, setCurrentThemeInde
                     initial={{ opacity: 0 }} 
                     animate={{ opacity: 1 }} 
                     exit={{ opacity: 0 }} 
-                    className="w-full h-full"
+                    className="w-full h-full absolute inset-0 overflow-y-auto"
                  >
                     <UISimulation index={currentIndex} />
                  </motion.div>
@@ -360,12 +360,12 @@ export const Showcase: React.FC<{ currentThemeIndex: number, setCurrentThemeInde
                   transition={{ duration: 0.5, ease: "easeOut" }}
                   src={currentScreenshots[currentIndex].url} 
                   alt={currentScreenshots[currentIndex].caption} 
-                  className="w-full h-auto block"
+                  className="w-full h-full object-cover block absolute inset-0"
                   onError={() => handleImageError(currentIndex)}
                 />
               )}
             </AnimatePresence>
-
+            
             {/* Bottom Caption Overlay */}
             <div className="absolute bottom-0 left-0 w-full p-8 z-20 bg-gradient-to-t from-byte-navy via-byte-navy/80 to-transparent pointer-events-none">
                <motion.div 
