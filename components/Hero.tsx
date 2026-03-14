@@ -1,158 +1,509 @@
 
-import React, { useRef } from 'react';
-import { ArrowRight, Sparkles, ShieldCheck } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { THEMES } from '../constants';
+import { ChevronLeft, ChevronRight, Maximize2, Monitor, Download, Play, Image as ImageIcon, Cpu, Settings, Search, CheckCircle2, X, Palette } from 'lucide-react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
-import { PRICE_PROMO, THEMES } from '../constants';
 import { useAppVersion } from '../hooks/useAppVersion';
 
-export const Hero: React.FC<{ currentThemeIndex: number }> = ({ currentThemeIndex }) => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end start"]
-  });
+// --- SUB-COMPONENTES DE SIMULAÇÃO (MOCKUPS VIVOS) ---
 
-  const y1 = useTransform(scrollYProgress, [0, 1], [0, 200]);
-  const y2 = useTransform(scrollYProgress, [0, 1], [0, -150]);
-  const rotate = useTransform(scrollYProgress, [0, 1], [0, 10]);
-  const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
-
-  // Pega a primeira print (Aba Vídeos) definida em constants.ts (do tema selecionado)
-  const mainPreview = THEMES[currentThemeIndex].screenshots[0].url;
-  const appVersion = useAppVersion();
+const UISimulation: React.FC<{ index: number }> = ({ index }) => {
+  const appVersion = useAppVersion();  // Simula as abas reais do software baseada no index
+  const renderContent = () => {
+    switch(index) {
+      case 0: // Aba Vídeos
+        return (
+          <div className="p-8 space-y-6 min-h-[500px]">
+            <div className="flex justify-between items-center mb-4">
+              <div className="flex items-center gap-3 bg-white/5 p-3 rounded-xl border border-white/10 w-full max-w-xl">
+                <Search size={18} className="text-gray-500" />
+                <span className="text-gray-400 text-sm">https://youtube.com/watch?v=8K_VIDEO_DEMO...</span>
+              </div>
+              <div className="px-6 py-3 bg-byte-cyan text-byte-navy font-black rounded-xl text-xs">ANALISAR LINK</div>
+            </div>
+            {[1, 2, 3].map(i => (
+              <div key={i} className="glass-panel p-4 rounded-xl flex items-center gap-4 border-l-4 border-byte-cyan">
+                <div className="w-24 h-14 bg-gray-800 rounded-lg flex items-center justify-center"><Play size={20} className="text-byte-cyan" /></div>
+                <div className="flex-1">
+                  <div className="h-3 w-48 bg-white/10 rounded mb-2"></div>
+                  <div className="flex gap-2">
+                    <div className="h-2 w-16 bg-byte-cyan/30 rounded"></div>
+                    <div className="h-2 w-12 bg-white/5 rounded"></div>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <div className="text-byte-cyan font-bold text-xs mb-1">8K HDR</div>
+                  <div className="w-32 h-1.5 bg-white/5 rounded-full overflow-hidden">
+                    <motion.div initial={{width: 0}} animate={{width: i === 1 ? '75%' : '100%'}} className="h-full bg-byte-cyan shadow-[0_0_10px_#00F0FF]"></motion.div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        );
+      case 1: // Aba Galeria
+        return (
+          <div className="p-8 grid grid-cols-4 gap-4 min-h-[500px]">
+             {[1,2,3,4,5,6,7,8].map(i => (
+               <div key={i} className="aspect-square glass-panel rounded-xl overflow-hidden group cursor-pointer border border-white/5 hover:border-byte-cyan/50">
+                  <div className="w-full h-full bg-gradient-to-br from-white/5 to-white/10 flex items-center justify-center">
+                    <ImageIcon size={24} className="text-gray-700 group-hover:text-byte-cyan transition-colors" />
+                  </div>
+               </div>
+             ))}
+          </div>
+        );
+      case 2: // Aba Thumbnails
+        return (
+          <div className="p-8 space-y-6 min-h-[500px]">
+             <div className="grid grid-cols-3 gap-6">
+                {[1,2,3].map(i => (
+                  <div key={i} className="glass-panel rounded-2xl overflow-hidden border border-white/5">
+                     <div className="aspect-video bg-gray-800 flex items-center justify-center">
+                        <ImageIcon size={32} className="text-white/10" />
+                     </div>
+                     <div className="p-4 flex justify-between items-center">
+                        <div className="h-2 w-24 bg-white/10 rounded"></div>
+                        <div className="px-3 py-1 bg-byte-cyan/20 text-byte-cyan text-[10px] rounded">MAX RES</div>
+                     </div>
+                  </div>
+                ))}
+             </div>
+             <div className="flex justify-center pt-8">
+                <div className="px-10 py-4 bg-byte-cyan text-byte-navy font-black rounded-2xl">BAIXAR TODAS AS CAPAS</div>
+             </div>
+          </div>
+        );
+      case 3: // IA Upscale
+        return (
+          <div className="p-8 flex flex-col items-center justify-center h-full gap-8">
+             <div className="relative w-full max-w-2xl aspect-video rounded-2xl overflow-hidden border border-byte-cyan/30">
+                <div className="absolute inset-0 bg-gray-900 flex items-center justify-center">
+                   <div className="flex gap-12 items-center">
+                      <div className="text-center">
+                         <div className="text-[10px] font-tech text-gray-500 mb-2">ORIGINAL (480P)</div>
+                         <div className="w-32 h-32 bg-white/5 blur-sm rounded-lg flex items-center justify-center"><ImageIcon className="opacity-20" /></div>
+                      </div>
+                      <motion.div animate={{scale: [1, 1.1, 1]}} transition={{repeat: Infinity}} className="text-byte-cyan"><Cpu size={32} /></motion.div>
+                      <div className="text-center">
+                         <div className="text-[10px] font-tech text-byte-cyan mb-2">BYTE-AI (4K HDR)</div>
+                         <div className="w-32 h-32 bg-byte-cyan/10 border border-byte-cyan/30 rounded-lg flex items-center justify-center shadow-[0_0_30px_rgba(0,240,255,0.2)]"><ImageIcon className="text-byte-cyan" /></div>
+                      </div>
+                   </div>
+                </div>
+                <div className="absolute inset-y-0 left-1/2 w-0.5 bg-byte-cyan shadow-[0_0_15px_#00F0FF]"></div>
+             </div>
+             <div className="flex gap-4">
+                <div className="px-8 py-3 bg-byte-purple text-white rounded-xl font-bold text-sm">INICIAR PROCESSAMENTO GPU</div>
+                <div className="px-8 py-3 border border-white/10 text-gray-400 rounded-xl font-bold text-sm">CONFIGURAR MODELO IA</div>
+             </div>
+          </div>
+        );
+      case 4: // Aba Conversor
+        return (
+          <div className="p-8 space-y-6 min-h-[500px]">
+             <div className="glass-panel p-8 rounded-3xl border border-white/5 flex flex-col items-center gap-6">
+                <div className="w-20 h-20 bg-byte-cyan/10 rounded-full flex items-center justify-center border border-byte-cyan/30">
+                   <Palette size={40} className="text-byte-cyan" />
+                </div>
+                <div className="text-center">
+                   <h4 className="text-white font-bold text-lg">Conversor FFmpeg Integrado</h4>
+                   <p className="text-gray-500 text-sm">Arraste arquivos para converter para MP4, MKV, MP3 ou WAV.</p>
+                </div>
+                <div className="w-full max-w-md p-4 bg-white/5 border border-dashed border-white/20 rounded-2xl text-center text-gray-600 text-xs">
+                   DROP FILES HERE
+                </div>
+                <div className="flex gap-3">
+                   <div className="px-4 py-2 bg-white/5 rounded-lg text-white text-xs">H.264</div>
+                   <div className="px-4 py-2 bg-white/5 rounded-lg text-white text-xs">H.265</div>
+                   <div className="px-4 py-2 bg-byte-cyan/20 text-byte-cyan rounded-lg text-xs">PRO PRESET</div>
+                </div>
+             </div>
+          </div>
+        );
+      case 5: // Aba Configurações
+        return (
+          <div className="p-12 space-y-8 min-h-[500px]">
+             <div className="flex items-center gap-6 pb-6 border-b border-white/5">
+                <div className="w-16 h-16 rounded-2xl bg-byte-purple/20 flex items-center justify-center border border-byte-purple/40">
+                   <Settings size={32} className="text-byte-purple" />
+                </div>
+                <div>
+                  <h4 className="text-white font-bold text-xl font-tech uppercase tracking-widest">Painel de Preferências</h4>
+                  <p className="text-gray-500 text-sm">Ajustes finos para máxima performance de hardware.</p>
+                </div>
+             </div>
+             <div className="grid grid-cols-2 gap-8">
+                {[1,2,3,4,5,6].map(i => (
+                  <div key={i} className="flex justify-between items-center p-4 glass-panel rounded-xl">
+                    <div className="h-3 w-40 bg-white/10 rounded"></div>
+                    <div className="w-10 h-5 bg-byte-cyan/20 rounded-full border border-byte-cyan/40 relative">
+                       <div className="absolute right-1 top-1 w-3 h-3 bg-byte-cyan rounded-full"></div>
+                    </div>
+                  </div>
+                ))}
+             </div>
+          </div>
+        );
+      default:
+        return null;
+    }
+  };
 
   return (
-    <section ref={containerRef} className="relative min-h-screen flex items-center pt-24 overflow-hidden bg-byte-navy">
-      {/* Background Elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+    <div className="w-full h-full bg-[#050C16] relative overflow-hidden font-sans">
+       {/* UI Sidebar Mockup */}
+       <div className="absolute left-0 top-10 bottom-0 w-16 md:w-20 bg-black/40 border-r border-white/5 flex flex-col items-center py-8 gap-6 z-10">
+          <div className={`p-3 rounded-xl ${index === 0 ? 'bg-byte-cyan text-byte-navy shadow-[0_0_15px_rgba(0,240,255,0.3)]' : 'text-gray-600'}`}><Download size={20} /></div>
+          <div className={`p-3 rounded-xl ${index === 1 ? 'bg-byte-cyan text-byte-navy shadow-[0_0_15px_rgba(0,240,255,0.3)]' : 'text-gray-600'}`}><ImageIcon size={20} /></div>
+          <div className={`p-3 rounded-xl ${index === 2 ? 'bg-byte-cyan text-byte-navy shadow-[0_0_15px_rgba(0,240,255,0.3)]' : 'text-gray-600'}`}><Monitor size={20} /></div>
+          <div className={`p-3 rounded-xl ${index === 3 ? 'bg-byte-cyan text-byte-navy shadow-[0_0_15px_rgba(0,240,255,0.3)]' : 'text-gray-600'}`}><Cpu size={20} /></div>
+          <div className={`p-3 rounded-xl ${index === 4 ? 'bg-byte-cyan text-byte-navy shadow-[0_0_15px_rgba(0,240,255,0.3)]' : 'text-gray-600'}`}><Palette size={20} /></div>
+          <div className="mt-auto mb-4">
+            <div className={`p-3 rounded-xl ${index === 5 ? 'bg-byte-cyan text-byte-navy shadow-[0_0_15px_rgba(0,240,255,0.3)]' : 'text-gray-600'}`}><Settings size={20} /></div>
+          </div>
+       </div>
+       
+       {/* Main Area */}
+       <div className="pl-20 pt-10 h-full w-full overflow-hidden">
+          <AnimatePresence mode="wait">
+            <motion.div 
+              key={index} 
+              initial={{ opacity: 0, x: 20 }} 
+              animate={{ opacity: 1, x: 0 }} 
+              exit={{ opacity: 0, x: -20 }}
+              className="h-full w-full"
+            >
+              {renderContent()}
+            </motion.div>
+          </AnimatePresence>
+       </div>
+
+       {/* Floating HUD Labels */}
+       <div className="absolute top-14 right-8 flex gap-2">
+          <div className="px-3 py-1 bg-green-500/20 text-green-400 text-[9px] font-black font-tech border border-green-500/30 rounded uppercase tracking-tighter flex items-center gap-1">
+             <CheckCircle2 size={10} /> CORE V{appVersion.toUpperCase()} ESTÁVEL
+          </div>
+          <div className="px-3 py-1 bg-byte-cyan/20 text-byte-cyan text-[9px] font-black font-tech border border-byte-cyan/30 rounded uppercase tracking-tighter">
+             GPU ACCEL: ON
+          </div>
+       </div>
+    </div>
+  );
+};
+
+// --- COMPONENTE PRINCIPAL ---
+
+export const Showcase: React.FC<{ currentThemeIndex: number, setCurrentThemeIndex: (index: number) => void }> = ({ currentThemeIndex, setCurrentThemeIndex }) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [imageErrors, setImageErrors] = useState<Record<string, boolean>>({});
+  const [isFullScreen, setIsFullScreen] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const thumbnailsContainerRef = useRef<HTMLDivElement>(null);
+  const thumbnailRefs = useRef<(HTMLButtonElement | null)[]>([]);
+
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start end", "end start"]
+  });
+
+  const y = useTransform(scrollYProgress, [0, 1], [50, -50]);
+  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.95, 1, 0.95]);
+
+  const currentTheme = THEMES[currentThemeIndex];
+  const currentScreenshots = currentTheme.screenshots;
+
+  useEffect(() => {
+    if (isFullScreen) return; // Pause auto-advance when in full screen
+
+    const timer = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % currentScreenshots.length);
+    }, 10000);
+
+    return () => clearInterval(timer);
+  }, [isFullScreen, currentScreenshots.length]);
+
+  useEffect(() => {
+    // Scroll thumbnail into view
+    const activeThumb = thumbnailRefs.current[currentIndex];
+    const container = thumbnailsContainerRef.current;
+    if (activeThumb && container) {
+      const containerWidth = container.offsetWidth;
+      const thumbLeft = activeThumb.offsetLeft;
+      const thumbWidth = activeThumb.offsetWidth;
+      
+      const scrollPos = thumbLeft - (containerWidth / 2) + (thumbWidth / 2);
+      
+      container.scrollTo({
+        left: scrollPos,
+        behavior: 'smooth'
+      });
+    }
+  }, [currentIndex]);
+
+  const nextSlide = (e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    setCurrentIndex((prev) => (prev + 1) % currentScreenshots.length);
+  };
+
+  const prevSlide = (e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    setCurrentIndex((prev) => (prev - 1 + currentScreenshots.length) % currentScreenshots.length);
+  };
+
+  const handleImageError = (index: number) => {
+    const screenshotId = currentScreenshots[index].id;
+    console.warn(`Asset ${currentScreenshots[index].url} não carregado. Ativando Modo Simulação para o usuário.`);
+    setImageErrors(prev => ({ ...prev, [screenshotId]: true }));
+  };
+
+  const toggleFullScreen = () => {
+    setIsFullScreen(!isFullScreen);
+  };
+
+  const handleThemeChange = (index: number) => {
+    setCurrentThemeIndex(index);
+    setCurrentIndex(0); // Reset to first screenshot when changing theme
+  };
+
+  return (
+    <section id="showcase" ref={containerRef} className="py-24 bg-byte-dark relative overflow-hidden">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-byte-purple/15 via-byte-navy to-byte-navy"></div>
+      
+      <div className="container mx-auto px-6 relative z-10">
+        <div className="text-center mb-16">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.8, ease: [0.2, 1, 0.3, 1] }}
+            className="inline-flex items-center gap-2 text-byte-cyan font-tech text-xs tracking-[0.3em] mb-4"
+          >
+             <Monitor size={14} /> TOUR COMPLETO PELA INTERFACE
+          </motion.div>
+          <motion.h2 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.8, delay: 0.1, ease: [0.2, 1, 0.3, 1] }}
+            className="text-4xl md:text-6xl font-tech font-bold text-white mb-6"
+          >
+            DOMÍNIO <span className="text-byte-cyan">TOTAL</span>
+          </motion.h2>
+          <motion.p 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.8, delay: 0.2, ease: [0.2, 1, 0.3, 1] }}
+            className="text-gray-400 max-w-2xl mx-auto text-lg leading-relaxed"
+          >
+            Seja baixando vídeos em 8K ou fazendo Upscale de fotos com IA local, a interface do Byte é projetada para ser cirúrgica.
+          </motion.p>
+          <motion.div 
+            initial={{ opacity: 0, scaleX: 0 }}
+            whileInView={{ opacity: 1, scaleX: 1 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.8, delay: 0.3, ease: [0.2, 1, 0.3, 1] }}
+            className="h-1.5 w-32 bg-gradient-to-r from-byte-purple to-byte-cyan mx-auto mt-8 rounded-full shadow-[0_0_15px_rgba(0,240,255,0.6)]"
+          ></motion.div>
+        </div>
+
         <motion.div 
-          style={{ y: y1 }}
-          className="absolute top-0 right-0 w-2/3 h-full bg-byte-purple/20 blur-[150px] rounded-full mix-blend-screen animate-pulse-slow"
-        ></motion.div>
-        <motion.div 
-          style={{ y: y2 }}
-          className="absolute bottom-0 left-0 w-1/2 h-full bg-byte-cyan/15 blur-[150px] rounded-full mix-blend-screen animate-pulse-slow"
-        ></motion.div>
-        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10"></div>
+          style={{ y, scale }}
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-50px" }}
+          transition={{ duration: 1, delay: 0.4, ease: [0.2, 1, 0.3, 1] }}
+          className="max-w-6xl mx-auto relative group"
+        >
+          {/* Theme Selector */}
+          <div className="flex flex-wrap justify-center gap-2 mb-8">
+            {THEMES.map((theme, idx) => (
+              <button
+                key={theme.name}
+                onClick={() => handleThemeChange(idx)}
+                className={`px-4 py-2 rounded-full text-sm font-tech tracking-wider transition-all duration-300 border flex items-center gap-2 ${
+                  idx === currentThemeIndex
+                    ? 'bg-byte-cyan/20 border-byte-cyan text-byte-cyan shadow-[0_0_15px_rgba(0,240,255,0.3)]'
+                    : 'bg-white/5 border-white/10 text-gray-400 hover:bg-white/10 hover:text-white'
+                }`}
+              >
+                <Palette size={14} />
+                {theme.name}
+              </button>
+            ))}
+          </div>
+
+          {/* Main Display Window */}
+          <div 
+            className="relative w-full aspect-video bg-[#050C16] rounded-2xl overflow-hidden shadow-[0_40px_100px_-20px_rgba(0,0,0,0.9)] border border-white/10 group-hover:border-byte-cyan/30 transition-colors duration-500 cursor-pointer"
+            onClick={toggleFullScreen}
+          >
+            <AnimatePresence>
+              {imageErrors[currentScreenshots[currentIndex].id] ? (
+                 <motion.div 
+                    key="sim" 
+                    initial={{ opacity: 0 }} 
+                    animate={{ opacity: 1 }} 
+                    exit={{ opacity: 0 }} 
+                    transition={{ duration: 0.3 }}
+                    className="w-full h-full absolute inset-0 overflow-y-auto"
+                 >
+                    <UISimulation index={currentIndex} />
+                 </motion.div>
+              ) : (
+                <motion.img 
+                  key={currentScreenshots[currentIndex].id}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.4, ease: "easeInOut" }}
+                  src={currentScreenshots[currentIndex].url} 
+                  alt={currentScreenshots[currentIndex].caption} 
+                  /* AQUI ESTÁ A CORREÇÃO: object-contain mostra a interface 100% inteira sem cortes, e o p-4 md:p-6 dá um respiro na borda */
+                  className="w-full h-full object-contain p-4 md:p-6 block absolute inset-0"
+                  onError={() => handleImageError(currentIndex)}
+                />
+              )}
+            </AnimatePresence>
+            
+            {/* Bottom Caption Overlay */}
+            <div className="absolute bottom-0 left-0 w-full p-8 z-20 bg-gradient-to-t from-byte-navy via-byte-navy/80 to-transparent pointer-events-none">
+               <motion.div 
+                 key={currentScreenshots[currentIndex].id + "-caption"}
+                 initial={{ y: 20, opacity: 0 }}
+                 animate={{ y: 0, opacity: 1 }}
+                 className="glass-panel inline-flex items-center gap-5 px-8 py-5 rounded-2xl border-l-4 border-byte-cyan shadow-2xl animate-float max-w-[90%] md:max-w-md pointer-events-auto"
+               >
+                 <div className="p-3 bg-byte-cyan/10 rounded-xl border border-byte-cyan/20 shadow-[0_0_15px_rgba(0,240,255,0.1)]">
+                    <Maximize2 size={24} className="text-byte-cyan" />
+                 </div>
+                 <div>
+                    <span className="text-byte-cyan font-tech text-[10px] tracking-widest uppercase mb-1.5 block opacity-80">
+                      {imageErrors[currentScreenshots[currentIndex].id] ? 'PROTOTIPAGEM REALTIME' : 'INTERFACE REAL'}
+                    </span>
+                    <h3 className="text-lg md:text-xl font-black text-white leading-tight tracking-tight">{currentScreenshots[currentIndex].caption}</h3>
+                 </div>
+               </motion.div>
+            </div>
+
+            {/* Navigation Arrows */}
+            <button 
+              onClick={prevSlide} 
+              className="absolute left-6 top-1/2 -translate-y-1/2 z-40 p-5 rounded-full bg-byte-navy/80 border border-white/10 text-white hover:bg-byte-purple hover:border-byte-purple transition-all duration-300 backdrop-blur-xl group-hover:translate-x-2 shadow-2xl"
+            >
+              <ChevronLeft size={28} />
+            </button>
+            <button 
+              onClick={nextSlide} 
+              className="absolute right-6 top-1/2 -translate-y-1/2 z-40 p-5 rounded-full bg-byte-navy/80 border border-white/10 text-white hover:bg-byte-cyan hover:border-byte-cyan hover:text-byte-navy transition-all duration-300 backdrop-blur-xl group-hover:-translate-x-2 shadow-2xl"
+            >
+              <ChevronRight size={28} />
+            </button>
+          </div>
+
+          {/* Thumbnails Navigation Grid */}
+          <div className="relative max-w-4xl mx-auto mt-12 px-12">
+            <button 
+              onClick={(e) => { e.stopPropagation(); prevSlide(); }}
+              className="absolute left-0 top-1/2 -translate-y-1/2 z-10 p-2 rounded-full bg-white/5 border border-white/10 text-white hover:bg-white/20 transition-all"
+            >
+              <ChevronLeft size={20} />
+            </button>
+            <div 
+              ref={thumbnailsContainerRef}
+              className="flex overflow-x-auto gap-4 pb-4 hide-scrollbar"
+              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+            >
+              {currentScreenshots.map((screenshot, idx) => (
+                <button 
+                  key={screenshot.id}
+                  ref={(el) => (thumbnailRefs.current[idx] = el)}
+                  onClick={() => setCurrentIndex(idx)}
+                  className={`flex-none group relative rounded-2xl overflow-hidden border-2 transition-all duration-500 bg-[#050C16] w-[calc(20%-0.8rem)] min-w-[120px] ${
+                    idx === currentIndex 
+                      ? 'border-byte-cyan shadow-[0_0_30px_rgba(0,240,255,0.3)] scale-105 z-10' 
+                      : 'border-white/5 opacity-40 hover:opacity-100 hover:border-white/20'
+                  }`}
+                >
+                  <div className="relative overflow-hidden bg-gray-900 aspect-video">
+                    {imageErrors[screenshot.id] ? (
+                      <div className="w-full h-full flex items-center justify-center bg-byte-surface">
+                         <Monitor size={20} className={idx === currentIndex ? 'text-byte-cyan' : 'text-gray-700'} />
+                      </div>
+                    ) : (
+                      <img 
+                        src={screenshot.url} 
+                        alt={`Aba ${idx + 1}`} 
+                        className="w-full h-full object-cover block transition-transform duration-500 group-hover:scale-110"
+                      />
+                    )}
+                  </div>
+                  <div className={`p-1.5 text-[8px] font-tech text-center uppercase tracking-widest font-black ${idx === currentIndex ? 'bg-byte-cyan text-byte-navy' : 'text-gray-500'}`}>
+                    ABA {idx + 1}
+                  </div>
+                </button>
+              ))}
+            </div>
+            <button 
+              onClick={(e) => { e.stopPropagation(); nextSlide(); }}
+              className="absolute right-0 top-1/2 -translate-y-1/2 z-10 p-2 rounded-full bg-white/5 border border-white/10 text-white hover:bg-white/20 transition-all"
+            >
+              <ChevronRight size={20} />
+            </button>
+          </div>
+        </motion.div>
       </div>
 
-      <div className="container mx-auto px-6 relative z-10 grid lg:grid-cols-2 gap-12 items-center">
-        {/* Left Content */}
-        <motion.div 
-          style={{ opacity }}
-          initial={{ opacity: 0, x: -50 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true, margin: "-50px" }}
-          transition={{ duration: 0.7, ease: "easeOut" }}
-          className="space-y-8 text-center lg:text-left text-sharp"
-        >
-          <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full border border-byte-cyan/50 bg-byte-cyan/10 text-byte-cyan font-tech text-[10px] tracking-[0.3em] mb-2 backdrop-blur-xl shadow-[0_0_20px_rgba(0,240,255,0.15)]">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-byte-cyan opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-byte-cyan"></span>
-            </span>
-            MOTOR V{appVersion.toUpperCase()} ATIVO & ESTÁVEL
-          </div>
-          
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-black font-tech leading-[0.9] text-white uppercase">
-            BAIXE 8K <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-byte-cyan to-byte-purple neon-text">
-              CORTADO
-            </span> <br />
-            SEM PARAR
-          </h1>
-          
-          <h2 className="text-white text-xl md:text-2xl max-w-xl mx-auto lg:mx-0 leading-relaxed font-bold tracking-tight">
-            Software definitivo com <span className="text-byte-cyan">Aceleração de Hardware</span>, <span className="text-byte-purple">IA de Upscaling</span> e <span className="text-byte-cyan">Conversor Integrado</span>.
-          </h2>
-          
-          <div className="flex flex-col sm:flex-row gap-6 justify-center lg:justify-start pt-4">
+      {/* Full Screen Modal */}
+      <AnimatePresence>
+        {isFullScreen && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-md p-4 md:p-12"
+            onClick={toggleFullScreen}
+          >
             <button 
-              onClick={() => {
-                if ((window as any).lenis) {
-                  (window as any).lenis.scrollTo('#pricing');
-                } else {
-                  document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' });
-                }
-              }}
-              className="group relative px-12 py-6 bg-byte-purple hover:bg-byte-purpleLight text-white font-black text-xl rounded-2xl shadow-[0_0_30px_rgba(98,0,234,0.5)] hover:shadow-[0_0_50px_rgba(98,0,234,0.7)] transition-all duration-300 transform hover:-translate-y-1.5 overflow-hidden"
+              className="absolute top-6 right-6 p-3 bg-white/10 hover:bg-white/20 rounded-full text-white transition-colors"
+              onClick={toggleFullScreen}
             >
-              <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 skew-y-12"></div>
-              <span className="relative flex items-center justify-center gap-3">
-                BAIXAR
-                <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
-              </span>
+              <X size={24} />
             </button>
             
             <button 
-               onClick={() => {
-                 if ((window as any).lenis) {
-                   (window as any).lenis.scrollTo('#showcase');
-                 } else {
-                   document.getElementById('showcase')?.scrollIntoView({ behavior: 'smooth' });
-                 }
-               }}
-               className="px-10 py-6 border-2 border-white/20 bg-white/5 text-white font-black rounded-2xl hover:bg-white/10 hover:border-byte-cyan transition-all backdrop-blur-md flex items-center justify-center gap-3 group"
+              onClick={prevSlide} 
+              className="absolute left-6 top-1/2 -translate-y-1/2 z-40 p-5 rounded-full bg-white/5 border border-white/10 text-white hover:bg-white/20 transition-all duration-300 backdrop-blur-xl"
             >
-              <span className="relative flex items-center justify-center gap-3">
-                <Sparkles size={22} className="text-byte-cyan group-hover:rotate-[30deg] transition-transform" /> VER INTERFACE COMPLETA
-              </span>
+              <ChevronLeft size={32} />
             </button>
-          </div>
-          
-          <div className="flex items-center justify-center lg:justify-start gap-10 pt-8">
-            <div className="flex flex-col items-center lg:items-start">
-               <span className="text-byte-cyan font-black text-2xl drop-shadow-[0_0_10px_rgba(0,240,255,0.4)]">30+</span>
-               <span className="text-[11px] text-gray-300 font-tech uppercase tracking-[0.1em] font-bold">Usuários</span>
-            </div>
-            <div className="h-12 w-px bg-white/20"></div>
-            <div className="flex flex-col items-center lg:items-start">
-               <span className="text-byte-purple font-black text-2xl drop-shadow-[0_0_10px_rgba(98,0,234,0.4)]">8K HDR</span>
-               <span className="text-[11px] text-gray-300 font-tech uppercase tracking-[0.1em] font-bold">Resolução</span>
-            </div>
-            <div className="h-12 w-px bg-white/20"></div>
-            <div className="flex flex-col items-center lg:items-start">
-               <span className="text-white font-black text-2xl flex items-center gap-2">100% <ShieldCheck size={24} className="text-green-400" /></span>
-               <span className="text-[11px] text-gray-300 font-tech uppercase tracking-[0.1em] font-bold">Seguro</span>
-            </div>
-          </div>
-        </motion.div>
+            
+            <button 
+              onClick={nextSlide} 
+              className="absolute right-6 top-1/2 -translate-y-1/2 z-40 p-5 rounded-full bg-white/5 border border-white/10 text-white hover:bg-white/20 transition-all duration-300 backdrop-blur-xl"
+            >
+              <ChevronRight size={32} />
+            </button>
 
-        {/* Right Content - Software Preview */}
-        <motion.div 
-          style={{ rotateY: rotate, scale: useTransform(scrollYProgress, [0, 1], [1, 1.1]) }}
-          initial={{ opacity: 0, scale: 0.9, rotateY: 15 }}
-          whileInView={{ opacity: 1, scale: 1, rotateY: 0 }}
-          viewport={{ once: true, margin: "-50px" }}
-          transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
-          className="relative animate-float hidden md:block group perspective-1000"
-        >
-          <div className="relative z-20 rounded-[2rem] overflow-hidden shadow-[0_0_120px_rgba(0,240,255,0.15)] border border-white/20 bg-[#0A101F] transition-all duration-700 group-hover:border-byte-cyan/50 group-hover:shadow-[0_0_150px_rgba(0,240,255,0.3)]">
-             {/* Imagem do Programa (Aba Vídeos) */}
-             <div className="relative bg-byte-navy overflow-hidden">
-                <AnimatePresence mode="wait">
-                  <motion.img 
-                    key={mainPreview}
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 0.9, scale: 1 }}
-                    exit={{ opacity: 0, scale: 1.05 }}
-                    transition={{ duration: 0.5, ease: "easeInOut" }}
-                    src={mainPreview} 
-                    alt="Interface do Byte Downloader" 
-                    className="w-full h-auto block transition-all duration-1000 group-hover:opacity-100 group-hover:scale-[1.03]" 
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).src = "https://placehold.co/1280x720/050C16/00F0FF?text=Screenshot+Nao+Encontrada";
-                    }}
-                  />
-                </AnimatePresence>
-             </div>
-          </div>
-          
-          {/* Visual Glows */}
-          <div className="absolute -top-20 -right-20 w-80 h-80 bg-byte-purple rounded-full blur-[150px] opacity-40 z-0"></div>
-          <div className="absolute -bottom-20 -left-20 w-80 h-80 bg-byte-cyan rounded-full blur-[150px] opacity-30 z-0"></div>
-        </motion.div>
-      </div>
+            <motion.img 
+              key={`fs-${currentScreenshots[currentIndex].id}`}
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              src={currentScreenshots[currentIndex].url} 
+              alt={currentScreenshots[currentIndex].caption} 
+              className="max-w-full max-h-full object-contain rounded-xl shadow-2xl"
+              onClick={(e) => e.stopPropagation()} // Prevent closing when clicking the image itself
+            />
+            
+            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 bg-black/60 backdrop-blur-md px-6 py-3 rounded-full border border-white/10 text-white font-tech tracking-widest text-sm">
+              {currentScreenshots[currentIndex].caption}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 };
