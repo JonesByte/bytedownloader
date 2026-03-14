@@ -360,7 +360,8 @@ export const Showcase: React.FC<{ currentThemeIndex: number, setCurrentThemeInde
                   transition={{ duration: 0.4, ease: "easeInOut" }}
                   src={currentScreenshots[currentIndex].url} 
                   alt={currentScreenshots[currentIndex].caption} 
-                  className="w-full h-full object-cover block absolute inset-0"
+                  /* AQUI ESTÁ A CORREÇÃO: object-contain mostra a interface 100% inteira sem cortes, e o p-4 md:p-6 dá um respiro na borda */
+                  className="w-full h-full object-contain p-4 md:p-6 block absolute inset-0"
                   onError={() => handleImageError(currentIndex)}
                 />
               )}
