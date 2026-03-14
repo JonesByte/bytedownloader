@@ -1,4 +1,3 @@
-
 import React, { useRef } from 'react';
 import { Check, X, AlertTriangle, HelpCircle } from 'lucide-react';
 import { PRICE_PROMO } from '../constants';
@@ -20,16 +19,18 @@ export const ComparisonTable: React.FC = () => {
     <section ref={containerRef} className="py-24 bg-byte-navy relative overflow-hidden">
       <motion.div 
         style={{ y, opacity }}
-        className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full max-w-4xl bg-byte-purple/5 blur-[100px] pointer-events-none"
+        // Adicionado overflow-hidden e limite de max-w para a sombra não vazar a tela
+        className="absolute top-0 left-1/2 -translate-x-1/2 w-[120%] md:w-full h-full max-w-4xl bg-byte-purple/5 blur-[80px] md:blur-[100px] pointer-events-none"
       ></motion.div>
       
-      <div className="container mx-auto px-6 relative z-10">
+      <div className="container mx-auto px-4 md:px-6 relative z-10">
         <div className="text-center mb-16">
           <motion.h2 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-50px" }}
             transition={{ duration: 0.8, ease: [0.2, 1, 0.3, 1] }}
+            // Ajuste do título para o mobile com a regra md:
             className="text-3xl md:text-5xl font-tech font-bold text-white mb-6"
           >
             COMPARE E <span className="text-byte-cyan">COMPROVE</span>
@@ -39,7 +40,8 @@ export const ComparisonTable: React.FC = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-50px" }}
             transition={{ duration: 0.8, delay: 0.1, ease: [0.2, 1, 0.3, 1] }}
-            className="text-gray-400 max-w-2xl mx-auto"
+            // Texto adaptado com padding lateral no mobile
+            className="text-gray-400 max-w-2xl mx-auto px-4 md:px-0 text-sm md:text-base"
           >
             Não desperdice seu tempo com ferramentas amadoras. Veja a diferença real.
           </motion.p>
@@ -69,7 +71,7 @@ export const ComparisonTable: React.FC = () => {
               <AlertTriangle size={20} /> Muitos
             </div>
             <div className="p-6 text-gray-300 border-b border-white/5 text-center bg-byte-navy/30 flex items-center justify-center">Não (Geralmente)</div>
-            <div className="p-6 text-white font-black border-b border-white/5 bg-byte-purple/10 text-center shadow-[inset_0_0_20px_rgba(98,0,234,0.05)] flex items-center justify-center text-lg">
+            <div className="p-6 text-white font-black border-b border-white/5 bg-byte-purple/10 text-center flex items-center justify-center text-lg">
               ZERO
             </div>
 
@@ -81,7 +83,7 @@ export const ComparisonTable: React.FC = () => {
             <div className="p-6 text-green-400 border-b border-white/5 text-center bg-byte-navy/30 flex items-center justify-center gap-2">
               <Check size={20} /> Sim
             </div>
-            <div className="p-6 text-byte-cyan font-bold border-b border-white/5 bg-byte-purple/10 text-center shadow-[inset_0_0_20px_rgba(98,0,234,0.05)] flex items-center justify-center gap-2">
+            <div className="p-6 text-byte-cyan font-bold border-b border-white/5 bg-byte-purple/10 text-center flex items-center justify-center gap-2">
               <Check size={20} /> Sim (Com HDR)
             </div>
 
@@ -93,7 +95,7 @@ export const ComparisonTable: React.FC = () => {
             <div className="p-6 text-yellow-400 border-b border-white/5 text-center bg-byte-navy/30 flex items-center justify-center gap-2">
               <HelpCircle size={20} /> Manual
             </div>
-            <div className="p-6 text-byte-cyan font-bold border-b border-white/5 bg-byte-purple/10 text-center shadow-[inset_0_0_20px_rgba(98,0,234,0.05)] flex items-center justify-center gap-2">
+            <div className="p-6 text-byte-cyan font-bold border-b border-white/5 bg-byte-purple/10 text-center flex items-center justify-center gap-2">
               <Check size={20} /> Automático
             </div>
 
@@ -101,7 +103,7 @@ export const ComparisonTable: React.FC = () => {
             <div className="p-6 text-white font-medium flex items-center pl-8 bg-byte-navy/30">Preço</div>
             <div className="p-6 text-gray-500 italic text-center bg-byte-navy/30 flex items-center justify-center">"Grátis" (Custa sua paz)</div>
             <div className="p-6 text-gray-300 text-center bg-byte-navy/30 flex items-center justify-center">R$ 80,00+</div>
-            <div className="p-6 text-byte-highlight font-extrabold text-2xl bg-byte-purple/10 text-center shadow-[inset_0_0_20px_rgba(98,0,234,0.05)] flex items-center justify-center">
+            <div className="p-6 text-byte-highlight font-extrabold text-2xl bg-byte-purple/10 text-center flex items-center justify-center">
               {formattedPrice}
             </div>
           </div>
@@ -115,28 +117,28 @@ export const ComparisonTable: React.FC = () => {
              whileInView={{ opacity: 1, x: 0 }}
              viewport={{ once: true, margin: "-50px" }}
              transition={{ duration: 0.5 }}
-             className="bg-byte-surface rounded-2xl border border-byte-cyan/50 shadow-[0_0_20px_rgba(0,240,255,0.2)] overflow-hidden relative"
+             className="bg-byte-surface rounded-2xl border border-byte-cyan/50 shadow-lg overflow-hidden relative"
            >
               <div className="absolute top-0 left-0 w-full h-1 bg-byte-cyan"></div>
               <div className="p-4 bg-byte-purple/20 text-center font-bold text-byte-cyan text-xl border-b border-white/10">
                 Byte Downloader
               </div>
-              <div className="p-6 space-y-4">
+              <div className="p-5 space-y-4">
                 <div className="flex justify-between items-center border-b border-white/5 pb-2">
-                   <span className="text-gray-400">Vírus / Ads</span>
-                   <span className="text-white font-black">ZERO</span>
+                   <span className="text-gray-400 text-sm">Vírus / Ads</span>
+                   <span className="text-white font-black text-sm">ZERO</span>
                 </div>
                 <div className="flex justify-between items-center border-b border-white/5 pb-2">
-                   <span className="text-gray-400">4K / 8K</span>
-                   <span className="text-byte-cyan font-bold flex items-center gap-1"><Check size={16}/> Sim (HDR)</span>
+                   <span className="text-gray-400 text-sm">4K / 8K</span>
+                   <span className="text-byte-cyan font-bold flex items-center gap-1 text-sm"><Check size={16}/> Sim (HDR)</span>
                 </div>
                 <div className="flex justify-between items-center border-b border-white/5 pb-2">
-                   <span className="text-gray-400">Auto-Update</span>
-                   <span className="text-byte-cyan font-bold flex items-center gap-1"><Check size={16}/> Automático</span>
+                   <span className="text-gray-400 text-sm">Auto-Update</span>
+                   <span className="text-byte-cyan font-bold flex items-center gap-1 text-sm"><Check size={16}/> Automático</span>
                 </div>
                 <div className="flex justify-between items-center pt-2">
-                   <span className="text-gray-400">Preço</span>
-                   <span className="text-byte-highlight font-extrabold text-2xl">{formattedPrice}</span>
+                   <span className="text-gray-400 text-sm">Preço</span>
+                   <span className="text-byte-highlight font-extrabold text-xl">{formattedPrice}</span>
                 </div>
               </div>
            </motion.div>
@@ -147,9 +149,9 @@ export const ComparisonTable: React.FC = () => {
              whileInView={{ opacity: 1, x: 0 }}
              viewport={{ once: true, margin: "-50px" }}
              transition={{ duration: 0.5 }}
-             className="bg-[#081221] rounded-2xl border border-white/5 p-6 opacity-75"
+             className="bg-[#081221] rounded-2xl border border-white/5 p-5 opacity-90"
            >
-             <h3 className="text-center font-bold text-gray-400 mb-4 pb-2 border-b border-white/5">Concorrentes / Sites</h3>
+             <h3 className="text-center font-bold text-gray-400 mb-4 pb-2 border-b border-white/5 text-sm">Concorrentes / Sites</h3>
               <div className="space-y-3 text-sm">
                 <div className="flex justify-between text-red-400">
                    <span>Vírus</span>
