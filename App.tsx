@@ -1,19 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { AnimatePresence, motion, useScroll } from 'framer-motion';
 import Lenis from 'lenis';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
-import { Features } from './components/Features';
-import { Showcase } from './components/Showcase';
-import { Payment } from './components/Payment';
 import { Footer } from './components/Footer';
 import { ChatWidget } from './components/ChatWidget';
-import { ProblemSolution } from './components/ProblemSolution';
-import { ComparisonTable } from './components/ComparisonTable';
-import { FAQ } from './components/FAQ';
 import { BackgroundMusic } from './components/BackgroundMusic';
 import { SplashScreen } from './components/SplashScreen';
-import { THEMES } from './constants'; // <-- Importação dos temas adicionada aqui
+import { THEMES } from './constants';
+
+// --- LAZY LOADING MÁGICO ---
+// Só carrega esses componentes pesados quando a tela é montada, poupando a internet do usuário.
+const Features = lazy(() => import('./components/Features').then(m => ({ default: m.Features })));
+const Showcase = lazy(() => import('./components/Showcase').then(m => ({ default: m.Showcase })));
+const ProblemSolution = lazy(() => import('./components/ProblemSolution').then(m => ({ default: m.ProblemSolution })));
+const ComparisonTable = lazy(() => import('./components/ComparisonTable').then(m => ({ default: m.ComparisonTable })));
+const FAQ = lazy(() => import('./components/FAQ').then(m => ({ default: m.FAQ })));
+const Payment = lazy(() => import('./components/Payment').then(m => ({ default: m.Payment })));
 
 const App: React.FC = () => {
   const [currentThemeIndex, setCurrentThemeIndex] = useState(0);
@@ -102,12 +105,19 @@ const App: React.FC = () => {
           <Navbar />
           <main>
             <Hero currentThemeIndex={currentThemeIndex} />
-            <ProblemSolution />
-            <Features />
-            <Showcase currentThemeIndex={currentThemeIndex} setCurrentThemeIndex={setCurrentThemeIndex} />
-            <ComparisonTable />
-            <FAQ />
-            <Payment />
+            
+            {/* Suspense envolve os componentes Lazy. Ele mostra o spinner se a net do cara for lenta. */}
+            <Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-byte-navy"><div className="w-8 h-8 border-2 border-byte-cyan border-t-transparent rounded-full animate-spin"></div></div>}>
+              <ProblemSolution />
+              <Features />
+              <Showcase currentThemeIndex={currentThemeIndex} setCurrentThemeIndex={setCurrentThemeIndex} />
+              <ComparisonTable />
+              
+              {/* ORDEM INVERTIDA: Payment primeiro, FAQ depois */}
+              <Payment />
+              <FAQ />
+            </Suspense>
+            
           </main>
           <Footer />
           <ChatWidget />
