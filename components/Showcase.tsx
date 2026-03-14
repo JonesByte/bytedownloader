@@ -258,3 +258,241 @@ export const Showcase: React.FC<{ currentThemeIndex: number, setCurrentThemeInde
   };
 
   return (
+    <section id="showcase" ref={containerRef} className="py-24 bg-byte-dark relative overflow-hidden">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-byte-purple/15 via-byte-navy to-byte-navy"></div>
+      
+      <div className="container mx-auto px-4 md:px-6 relative z-10">
+        <div className="text-center mb-12 md:mb-16">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.8, ease: [0.2, 1, 0.3, 1] }}
+            className="inline-flex items-center gap-2 text-byte-cyan font-tech text-[10px] md:text-xs tracking-[0.2em] md:tracking-[0.3em] mb-4"
+          >
+             <Monitor size={14} /> TOUR COMPLETO PELA INTERFACE
+          </motion.div>
+          <motion.h2 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.8, delay: 0.1, ease: [0.2, 1, 0.3, 1] }}
+            className="text-3xl md:text-4xl lg:text-6xl font-tech font-bold text-white mb-4 md:mb-6"
+          >
+            DOMÍNIO <span className="text-byte-cyan">TOTAL</span>
+          </motion.h2>
+          <motion.p 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.8, delay: 0.2, ease: [0.2, 1, 0.3, 1] }}
+            className="text-gray-400 max-w-2xl mx-auto text-sm md:text-lg leading-relaxed px-4 md:px-0"
+          >
+            Seja baixando vídeos em 8K ou fazendo Upscale de fotos com IA local, a interface do Byte é projetada para ser cirúrgica.
+          </motion.p>
+          <motion.div 
+            initial={{ opacity: 0, scaleX: 0 }}
+            whileInView={{ opacity: 1, scaleX: 1 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.8, delay: 0.3, ease: [0.2, 1, 0.3, 1] }}
+            className="h-1.5 w-24 md:w-32 bg-gradient-to-r from-byte-purple to-byte-cyan mx-auto mt-6 md:mt-8 rounded-full shadow-[0_0_15px_rgba(0,240,255,0.6)]"
+          ></motion.div>
+        </div>
+
+        <motion.div 
+          style={{ y, scale }}
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-50px" }}
+          transition={{ duration: 1, delay: 0.4, ease: [0.2, 1, 0.3, 1] }}
+          className="max-w-6xl mx-auto relative group"
+        >
+          <div className="flex flex-wrap justify-center gap-2 mb-6 md:mb-8">
+            {THEMES.map((theme, idx) => (
+              <button
+                key={theme.name}
+                onClick={() => handleThemeChange(idx)}
+                className={`px-3 py-1.5 md:px-4 md:py-2 rounded-full text-xs md:text-sm font-tech tracking-wider transition-all duration-300 border flex items-center gap-2 ${
+                  idx === currentThemeIndex
+                    ? 'bg-byte-cyan/20 border-byte-cyan text-byte-cyan shadow-[0_0_15px_rgba(0,240,255,0.3)]'
+                    : 'bg-white/5 border-white/10 text-gray-400 hover:bg-white/10 hover:text-white'
+                }`}
+              >
+                <Palette size={12} className="md:w-[14px] md:h-[14px]" />
+                {theme.name}
+              </button>
+            ))}
+          </div>
+
+          {/* Main Display Window */}
+          <div 
+            className="relative w-full aspect-video bg-[#050C16] rounded-xl md:rounded-2xl overflow-hidden shadow-[0_40px_100px_-20px_rgba(0,0,0,0.9)] border border-white/10 group-hover:border-byte-cyan/30 transition-colors duration-500 cursor-pointer"
+            onClick={toggleFullScreen}
+          >
+            <AnimatePresence>
+              {imageErrors[currentScreenshots[currentIndex].id] ? (
+                 <motion.div 
+                    key="sim" 
+                    initial={{ opacity: 0 }} 
+                    animate={{ opacity: 1 }} 
+                    exit={{ opacity: 0 }} 
+                    transition={{ duration: 0.3 }}
+                    className="w-full h-full absolute inset-0 overflow-y-auto"
+                 >
+                    <UISimulation index={currentIndex} />
+                 </motion.div>
+              ) : (
+                <motion.img 
+                  key={currentScreenshots[currentIndex].id}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.4, ease: "easeInOut" }}
+                  src={currentScreenshots[currentIndex].url} 
+                  alt={currentScreenshots[currentIndex].caption} 
+                  className="w-full h-full object-contain p-2 md:p-6 block absolute inset-0"
+                  onError={() => handleImageError(currentIndex)}
+                />
+              )}
+            </AnimatePresence>
+            
+            {/* Bottom Caption Overlay */}
+            <div className="absolute bottom-0 left-0 w-full p-3 md:p-8 z-20 bg-gradient-to-t from-byte-navy via-byte-navy/90 to-transparent pointer-events-none">
+               <motion.div 
+                 key={currentScreenshots[currentIndex].id + "-caption"}
+                 initial={{ y: 20, opacity: 0 }}
+                 animate={{ y: 0, opacity: 1 }}
+                 className="glass-panel inline-flex items-center gap-2 md:gap-5 px-3 py-2 md:px-8 md:py-5 rounded-lg md:rounded-2xl border-l-2 md:border-l-4 border-byte-cyan shadow-2xl animate-float max-w-[95%] md:max-w-md pointer-events-auto"
+               >
+                 <div className="p-1.5 md:p-3 bg-byte-cyan/10 rounded-md md:rounded-xl border border-byte-cyan/20 shadow-[0_0_15px_rgba(0,240,255,0.1)]">
+                    <Maximize2 className="w-3 h-3 md:w-6 md:h-6 text-byte-cyan" />
+                 </div>
+                 <div>
+                    <span className="text-byte-cyan font-tech text-[6px] md:text-[10px] tracking-widest uppercase mb-0.5 md:mb-1 block opacity-80">
+                      {imageErrors[currentScreenshots[currentIndex].id] ? 'PROTOTIPAGEM REALTIME' : 'INTERFACE REAL'}
+                    </span>
+                    <h3 className="text-xs md:text-xl font-black text-white leading-tight tracking-tight">{currentScreenshots[currentIndex].caption}</h3>
+                 </div>
+               </motion.div>
+            </div>
+
+            {/* Navigation Arrows */}
+            <button 
+              onClick={prevSlide} 
+              className="absolute left-2 md:left-6 top-1/2 -translate-y-1/2 z-40 p-2 md:p-5 rounded-full bg-byte-navy/80 border border-white/10 text-white hover:bg-byte-purple hover:border-byte-purple transition-all duration-300 backdrop-blur-xl group-hover:translate-x-1 md:group-hover:translate-x-2 shadow-2xl"
+            >
+              <ChevronLeft className="w-4 h-4 md:w-7 md:h-7" />
+            </button>
+            <button 
+              onClick={nextSlide} 
+              className="absolute right-2 md:right-6 top-1/2 -translate-y-1/2 z-40 p-2 md:p-5 rounded-full bg-byte-navy/80 border border-white/10 text-white hover:bg-byte-cyan hover:border-byte-cyan hover:text-byte-navy transition-all duration-300 backdrop-blur-xl group-hover:-translate-x-1 md:group-hover:-translate-x-2 shadow-2xl"
+            >
+              <ChevronRight className="w-4 h-4 md:w-7 md:h-7" />
+            </button>
+          </div>
+
+          {/* Thumbnails Navigation Grid */}
+          <div className="relative max-w-4xl mx-auto mt-6 md:mt-12 px-8 md:px-12">
+            <button 
+              onClick={(e) => { e.stopPropagation(); prevSlide(); }}
+              className="absolute left-0 top-1/2 -translate-y-1/2 z-10 p-1 md:p-2 rounded-full bg-white/5 border border-white/10 text-white hover:bg-white/20 transition-all"
+            >
+              <ChevronLeft className="w-4 h-4 md:w-5 md:h-5" />
+            </button>
+            <div 
+              ref={thumbnailsContainerRef}
+              className="flex overflow-x-auto gap-2 md:gap-4 pb-4 hide-scrollbar"
+              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+            >
+              {currentScreenshots.map((screenshot, idx) => (
+                <button 
+                  key={screenshot.id}
+                  ref={(el) => (thumbnailRefs.current[idx] = el)}
+                  onClick={() => setCurrentIndex(idx)}
+                  className={`flex-none group relative rounded-xl md:rounded-2xl overflow-hidden border-2 transition-all duration-500 bg-[#050C16] w-[28%] md:w-[calc(20%-0.8rem)] min-w-[80px] md:min-w-[120px] ${
+                    idx === currentIndex 
+                      ? 'border-byte-cyan shadow-[0_0_30px_rgba(0,240,255,0.3)] scale-105 z-10' 
+                      : 'border-white/5 opacity-40 hover:opacity-100 hover:border-white/20'
+                  }`}
+                >
+                  <div className="relative overflow-hidden bg-gray-900 aspect-video">
+                    {imageErrors[screenshot.id] ? (
+                      <div className="w-full h-full flex items-center justify-center bg-byte-surface">
+                         <Monitor className={`w-4 h-4 md:w-5 md:h-5 ${idx === currentIndex ? 'text-byte-cyan' : 'text-gray-700'}`} />
+                      </div>
+                    ) : (
+                      <img 
+                        src={screenshot.url} 
+                        alt={`Aba ${idx + 1}`} 
+                        className="w-full h-full object-cover block transition-transform duration-500 group-hover:scale-110"
+                      />
+                    )}
+                  </div>
+                  <div className={`p-1 md:p-1.5 text-[7px] md:text-[8px] font-tech text-center uppercase tracking-widest font-black ${idx === currentIndex ? 'bg-byte-cyan text-byte-navy' : 'text-gray-500'}`}>
+                    ABA {idx + 1}
+                  </div>
+                </button>
+              ))}
+            </div>
+            <button 
+              onClick={(e) => { e.stopPropagation(); nextSlide(); }}
+              className="absolute right-0 top-1/2 -translate-y-1/2 z-10 p-1 md:p-2 rounded-full bg-white/5 border border-white/10 text-white hover:bg-white/20 transition-all"
+            >
+              <ChevronRight className="w-4 h-4 md:w-5 md:h-5" />
+            </button>
+          </div>
+        </motion.div>
+      </div>
+
+      {/* Full Screen Modal */}
+      <AnimatePresence>
+        {isFullScreen && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-md p-2 md:p-12"
+            onClick={toggleFullScreen}
+          >
+            <button 
+              className="absolute top-4 right-4 md:top-6 md:right-6 p-2 md:p-3 bg-white/10 hover:bg-white/20 rounded-full text-white transition-colors z-[110]"
+              onClick={toggleFullScreen}
+            >
+              <X className="w-5 h-5 md:w-6 md:h-6" />
+            </button>
+            
+            <button 
+              onClick={prevSlide} 
+              className="absolute left-2 md:left-6 top-1/2 -translate-y-1/2 z-[110] p-3 md:p-5 rounded-full bg-white/10 border border-white/10 text-white hover:bg-white/30 transition-all duration-300 backdrop-blur-xl"
+            >
+              <ChevronLeft className="w-6 h-6 md:w-8 md:h-8" />
+            </button>
+            
+            <button 
+              onClick={nextSlide} 
+              className="absolute right-2 md:right-6 top-1/2 -translate-y-1/2 z-[110] p-3 md:p-5 rounded-full bg-white/10 border border-white/10 text-white hover:bg-white/30 transition-all duration-300 backdrop-blur-xl"
+            >
+              <ChevronRight className="w-6 h-6 md:w-8 md:h-8" />
+            </button>
+
+            <motion.img 
+              key={`fs-${currentScreenshots[currentIndex].id}`}
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              src={currentScreenshots[currentIndex].url} 
+              alt={currentScreenshots[currentIndex].caption} 
+              className="w-full max-w-full max-h-[85vh] object-contain rounded-lg md:rounded-xl shadow-2xl relative z-[105]"
+              onClick={(e) => e.stopPropagation()}
+            />
+            
+            <div className="absolute bottom-6 md:bottom-8 left-1/2 -translate-x-1/2 bg-black/80 backdrop-blur-md px-4 py-2 md:px-6 md:py-3 rounded-full border border-white/10 text-white font-tech tracking-widest text-[10px] md:text-sm whitespace-nowrap z-[110]">
+              {currentScreenshots[currentIndex].caption}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </section>
+  );
+};
