@@ -14,15 +14,15 @@ const iconMap: Record<string, React.ElementType> = {
 export const Features: React.FC = () => {
   return (
     <section id="features" className="py-24 bg-byte-dark relative overflow-hidden">
-       {/* Decorative Lines */}
+       {/* Decorative Lines (Mantidas, mas sem causar lentidão) */}
        <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-byte-purple to-transparent opacity-50"></div>
        <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-byte-cyan to-transparent opacity-50"></div>
        
-      <div className="container mx-auto px-6 relative z-10">
+      <div className="container mx-auto px-4 md:px-6 relative z-10">
         <motion.div 
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-50px" }}
+          viewport={{ once: true }}
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
@@ -34,26 +34,30 @@ export const Features: React.FC = () => {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Grid ajustado para mobile (gap-4) e PC (gap-6) */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
           {FEATURES.map((feature, index) => {
             const Icon = iconMap[feature.icon] || Zap;
             return (
               <motion.div 
                 key={feature.id} 
-                initial={{ opacity: 0, y: 40 }}
+                initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-50px" }}
-                transition={{ duration: 0.8, ease: [0.2, 1, 0.3, 1] }}
-                className="group relative p-6 rounded-2xl bg-byte-surface border border-white/5 hover:border-byte-cyan/50 transition-all duration-300 hover:transform hover:-translate-y-2 overflow-hidden"
+                viewport={{ once: true }}
+                // O segredo da cascata: o delay multiplica pelo index, carregando um de cada vez
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                // Flexbox (flex flex-col h-full) para todos os cards terem a mesma altura sempre
+                className="group p-6 md:p-8 rounded-2xl bg-[#0F2547] border border-white/5 hover:border-byte-cyan/30 transition-colors duration-300 flex flex-col h-full"
               >
-                <div className="absolute inset-0 bg-gradient-to-br from-byte-purple/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                
-                <div className="w-14 h-14 rounded-xl bg-byte-navy border border-white/10 flex items-center justify-center mb-6 group-hover:border-byte-cyan/50 group-hover:shadow-[0_0_15px_rgba(0,240,255,0.3)] transition-all">
-                  <Icon className="text-byte-cyan" size={28} />
+                <div className="w-12 h-12 md:w-14 md:h-14 rounded-xl bg-[#050C16] border border-white/10 flex items-center justify-center mb-5 group-hover:border-byte-cyan/50 transition-colors">
+                  <Icon className="text-byte-cyan" size={24} />
                 </div>
                 
-                <h3 className="text-xl font-bold text-white mb-3 font-tech group-hover:text-byte-cyan transition-colors">{feature.title}</h3>
-                <p className="text-gray-400 text-sm leading-relaxed">
+                <h3 className="text-lg md:text-xl font-bold text-white mb-2 font-tech group-hover:text-byte-cyan transition-colors">
+                  {feature.title}
+                </h3>
+                {/* mt-auto empurra a descrição para alinhar perfeitamente o layout */}
+                <p className="text-gray-400 text-sm md:text-base leading-relaxed mt-auto">
                   {feature.description}
                 </p>
               </motion.div>
