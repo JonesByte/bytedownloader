@@ -3,12 +3,41 @@ import { Volume2, VolumeX, Music, Play } from 'lucide-react';
 
 export const BackgroundMusic: React.FC = () => {
   const audioRef = useRef<HTMLAudioElement>(null);
+  const fadeIntervalRef = useRef<NodeJS.Timeout | null>(null); // Referência para guardar o intervalo do fade
   const [isMuted, setIsMuted] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [isReady, setIsReady] = useState(false);
   const [isBlocked, setIsBlocked] = useState(false);
   const hasStarted = useRef(false);
+
+  // --- MOTOR DE FADE IN (-15dB em 2 segundos) ---
+  const applyFadeIn = (audio: HTMLAudioElement) => {
+    // Limpa qualquer fade antigo que esteja rodando
+    if (fadeIntervalRef.current) {
+      clearInterval(fadeIntervalRef.current);
+    }
+
+    const targetVolume = 0.18; // 0.18 equivale a aproximadamente -15dB
+    const fadeDuration = 2000; // 2 segundos
+    const steps = 40; // Quantidade de "degraus" para deixar a transição bem suave
+    const stepTime = fadeDuration / steps;
+    const volumeStep = targetVolume / steps;
+
+    // Zera o volume antes de começar a rampa
+    audio.volume = 0;
+
+    let currentStep = 0;
+    fadeIntervalRef.current = setInterval(() => {
+      currentStep++;
+      if (currentStep <= steps) {
+        audio.volume = currentStep * volumeStep;
+      } else {
+        audio.volume = targetVolume; // Crava no -15dB
+        if (fadeIntervalRef.current) clearInterval(fadeIntervalRef.current);
+      }
+    }, stepTime);
+  };
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -20,6 +49,7 @@ export const BackgroundMusic: React.FC = () => {
 
       try {
         await audio.play();
+        applyFadeIn(audio); // Inicia o Fade In
         hasStarted.current = true;
         setIsPlaying(true);
         setIsBlocked(false);
@@ -50,8 +80,7 @@ export const BackgroundMusic: React.FC = () => {
 
     return () => {
       removeListeners();
-      // IMPORTANT: We do NOT pause here. 
-      // This allows the audio to keep playing even if the component re-renders.
+      if (fadeIntervalRef.current) clearInterval(fadeIntervalRef.current);
     };
   }, []);
 
@@ -63,6 +92,7 @@ export const BackgroundMusic: React.FC = () => {
       
       if (!newMutedState && audioRef.current.paused && !hasStarted.current) {
         audioRef.current.play().then(() => {
+          applyFadeIn(audioRef.current!); // Inicia o Fade In também se for ativado pelo botão
           setIsPlaying(true);
           hasStarted.current = true;
           setIsBlocked(false);
@@ -129,6 +159,7 @@ export const BackgroundMusic: React.FC = () => {
           onClick={() => {
             if (audioRef.current) {
               audioRef.current.play().then(() => {
+                applyFadeIn(audioRef.current!); // Inicia o Fade In pelo toque na tela
                 setIsPlaying(true);
                 hasStarted.current = true;
                 setIsBlocked(false);
