@@ -7,7 +7,7 @@ export function useAppVersion() {
   useEffect(() => {
     const fetchVersion = async () => {
       try {
-        const response = await fetch('https://gist.githubusercontent.com/JonesByte/149ab7001bbe58c4c20afb0f007021b2/raw/0a79c5099ce635354a27f3a104890be2f6fd4754/.js');
+        const response = await fetch('https://gist.githubusercontent.com/JonesByte/149ab7001bbe58c4c20afb0f007021b2/raw/.js?t=' + Date.now());
         if (response.ok) {
           const data = await response.json();
           if (data.latest_version) {

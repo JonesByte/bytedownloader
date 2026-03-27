@@ -2,7 +2,7 @@
 import { Feature, Screenshot, ThemeData } from './types';
 
 export const APP_NAME = "Byte Downloader";
-export const APP_VERSION = "4.2.3"; 
+export const APP_VERSION = "4.3.3"; 
 
 // Preços
 export const PRICE_ORIGINAL = { value: 80.00, display: "80,00" };
