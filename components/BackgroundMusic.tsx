@@ -18,7 +18,7 @@ export const BackgroundMusic: React.FC = () => {
       clearInterval(fadeIntervalRef.current);
     }
 
-    const targetVolume = 0.18; // 0.18 equivale a aproximadamente -15dB
+    const targetVolume = 0.55; // Volume de 55%
     const fadeDuration = 2000; // 2 segundos
     const steps = 40; // Quantidade de "degraus" para deixar a transição bem suave
     const stepTime = fadeDuration / steps;

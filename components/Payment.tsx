@@ -72,7 +72,7 @@ export const Payment: React.FC = () => {
                <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20"></div>
                
                <div className="relative z-10 w-full">
-                 <div className="inline-block bg-white/20 backdrop-blur-md text-white text-xs font-bold px-3 py-1 rounded-full mb-6 border border-white/20">
+                 <div className="inline-block bg-white/30 backdrop-blur-md text-white text-[13px] font-black px-5 py-2 rounded-full mb-6 border border-white/40 shadow-sm uppercase tracking-wide">
                    CUPOM DE 25% APLICADO
                  </div>
                  
@@ -82,7 +82,7 @@ export const Payment: React.FC = () => {
                    <span className="text-3xl align-top">R$</span>{Math.floor(PRICE_PROMO)}<span className="text-3xl">,{(PRICE_PROMO % 1).toFixed(2).substring(2)}</span>
                  </div>
                  
-                 <div className="text-white/90 font-medium mb-8">Pagamento Único • Licença Vitalícia</div>
+                 <div className="text-white/90 font-medium mb-8 text-base">Pagamento Único • Licença <span className="text-byte-highlight font-black uppercase tracking-wider">Vitalícia</span></div>
 
                  <a 
                    href={PAYMENT_LINK}
