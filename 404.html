@@ -2,19 +2,261 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google-site-verification" content="WTMT70i_EKPCF6BtNM7JI4Ss3mptUiMNuFqgakhVTBg" />
-  <title>Byte Downloader - Redirecionando...</title>
+  <title>Byte Downloader - Baixa. Melhora. Converte.</title>
+  <meta name="description" content="Baixe vídeos em até 8K, pegue capas, melhore imagens com IA, transcreva falas e converta arquivos em um app simples para Windows 10/11.">
+  <meta name="keywords" content="byte downloader, bytedownloader, baixar videos, baixar video, baixar video youtube, upscale imagem ia">
+  
   <link rel="canonical" href="https://jonesbyte.github.io/bd/" />
-  <meta http-equiv="refresh" content="0; url=https://jonesbyte.github.io/bd/" />
-  <meta name="robots" content="index, follow" />
+  <link rel="alternate" hreflang="x-default" href="https://jonesbyte.github.io/bd/" />
+  <link rel="alternate" hreflang="pt-BR" href="https://jonesbyte.github.io/bd/" />
+  <link rel="alternate" hreflang="pt" href="https://jonesbyte.github.io/bd/pt" />
+  <link rel="alternate" hreflang="pt-PT" href="https://jonesbyte.github.io/bd/pt-pt" />
+  <link rel="alternate" hreflang="en" href="https://jonesbyte.github.io/bd/en" />
+  <link rel="alternate" hreflang="es" href="https://jonesbyte.github.io/bd/es" />
+
+  <meta property="og:site_name" content="Byte Downloader">
+  <meta property="og:title" content="Byte Downloader - Baixa. Melhora. Converte.">
+  <meta property="og:description" content="Baixe vídeos em até 8K, melhore com IA e converta arquivos em um app simples para Windows 10/11.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://jonesbyte.github.io/bd/">
+  <meta property="og:image" content="https://jonesbyte.github.io/bd/preview-bd-v8.png">
+
+  <!-- Favicon e Ícones oficiais idênticos ao /bd/ -->
+  <link rel="shortcut icon" href="https://jonesbyte.github.io/bd/favicon.ico" />
+  <link rel="icon" type="image/x-icon" href="https://jonesbyte.github.io/bd/favicon.ico" />
+  <link rel="icon" type="image/png" sizes="48x48" href="https://jonesbyte.github.io/bd/icon-48.png" />
+  <link rel="icon" type="image/png" sizes="96x96" href="https://jonesbyte.github.io/bd/icon-96.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="https://jonesbyte.github.io/bd/icon-192.png" />
+  <link rel="icon" type="image/png" sizes="512x512" href="https://jonesbyte.github.io/bd/icon-512.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="https://jonesbyte.github.io/bd/apple-touch-icon.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: #050C16;
+      color: #ffffff;
+      font-family: 'Montserrat', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      overflow: hidden;
+      background-image: radial-gradient(circle at 50% 30%, rgba(98, 0, 234, 0.22) 0%, rgba(5, 12, 22, 0.95) 60%);
+    }
+    .container {
+      max-width: 540px;
+      width: 100%;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: rgba(15, 37, 71, 0.55);
+      border: 1px solid rgba(0, 240, 255, 0.2);
+      border-radius: 24px;
+      padding: 44px 32px;
+      box-shadow: 0 0 50px rgba(0, 240, 255, 0.12), 0 20px 40px rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    .logo-img {
+      max-width: 280px;
+      width: 100%;
+      height: auto;
+      object-contain: fit;
+      margin-bottom: 24px;
+      filter: drop-shadow(0 0 20px rgba(0, 240, 255, 0.35));
+    }
+    .hero-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 20px;
+      font-weight: 900;
+      letter-spacing: 2px;
+      margin-bottom: 12px;
+      color: #ffffff;
+    }
+    .hero-title .highlight {
+      color: #00F0FF;
+      text-shadow: 0 0 16px rgba(0, 240, 255, 0.6);
+    }
+    .subtitle {
+      font-size: 13px;
+      line-height: 1.6;
+      color: #94A3B8;
+      margin-bottom: 28px;
+    }
+    .loader-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .spinner {
+      width: 22px;
+      height: 22px;
+      border: 3px solid rgba(0, 240, 255, 0.2);
+      border-top-color: #00F0FF;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    .status-text {
+      font-size: 13px;
+      font-weight: 700;
+      color: #00F0FF;
+      letter-spacing: 0.5px;
+    }
+    .redirect-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 28px;
+      background: linear-gradient(135deg, #6200EA 0%, #7B2CBF 100%);
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 15px rgba(98, 0, 234, 0.4);
+    }
+    .redirect-btn:hover {
+      background: linear-gradient(135deg, #7B2CBF 0%, #6200EA 100%);
+      box-shadow: 0 0 25px rgba(0, 240, 255, 0.6);
+      transform: translateY(-1px);
+    }
+    .footer-note {
+      margin-top: 24px;
+      font-size: 11px;
+      color: #64748B;
+    }
+  </style>
+
   <script>
-    var path = window.location.pathname.replace(/^\/bytedownloader\/?/, '');
-    var search = window.location.search || '';
-    var hash = window.location.hash || '';
-    window.location.replace('https://jonesbyte.github.io/bd/' + path + search + hash);
+    const I18N = {
+      'pt': {
+        title1: 'BAIXA. ',
+        title2: 'MELHORA. ',
+        title3: 'CONVERTE.',
+        subtitle: 'Cole o link, pegue o vídeo, melhore imagem com IA, transcreva fala e deixe tudo pronto no mesmo app.',
+        status: 'Redirecionando para o site oficial...',
+        button: 'Acessar agora',
+        targetLang: ''
+      },
+      'pt-pt': {
+        title1: 'TRANSFERE. ',
+        title2: 'MELHORA. ',
+        title3: 'CONVERTE.',
+        subtitle: 'Cola a ligação, obtém o vídeo, guarda a capa, melhora a imagem, transcreve a voz e prepara o áudio.',
+        status: 'A redirecionar para o site oficial...',
+        button: 'Aceder agora',
+        targetLang: 'pt-pt'
+      },
+      'en': {
+        title1: 'DOWNLOAD. ',
+        title2: 'ENHANCE. ',
+        title3: 'CONVERT.',
+        subtitle: 'Paste the link, grab videos, upscale images with AI, transcribe speech, and prepare your audio in one app.',
+        status: 'Redirecting to official website...',
+        button: 'Enter now',
+        targetLang: 'en'
+      },
+      'es': {
+        title1: 'DESCARGA. ',
+        title2: 'MEJORA. ',
+        title3: 'CONVIERTE.',
+        subtitle: 'Pega el enlace, baja el video, mejora imágenes con IA, transcribe voz y prepara el audio en la misma app.',
+        status: 'Redirigiendo al sitio oficial...',
+        button: 'Entrar ahora',
+        targetLang: 'es'
+      }
+    };
+
+    function detectLang() {
+      const pathname = window.location.pathname.toLowerCase();
+      if (pathname.includes('/pt-pt')) return 'pt-pt';
+      if (pathname.includes('/pt')) return 'pt';
+      if (pathname.includes('/es')) return 'es';
+      if (pathname.includes('/en') || pathname.includes('/us')) return 'en';
+
+      const navLangs = navigator.languages || [navigator.language || 'pt'];
+      for (const lang of navLangs) {
+        const l = lang.toLowerCase();
+        if (l === 'pt-pt') return 'pt-pt';
+        if (l.startsWith('pt')) return 'pt';
+        if (l.startsWith('es')) return 'es';
+        if (l.startsWith('en')) return 'en';
+      }
+      return 'pt';
+    }
+
+    const currentLangKey = detectLang();
+    const t = I18N[currentLangKey] || I18N['pt'];
+
+    function getTargetUrl() {
+      const subPath = t.targetLang ? t.targetLang : '';
+      const search = window.location.search || '';
+      const hash = window.location.hash || '';
+      return 'https://jonesbyte.github.io/bd/' + (subPath ? subPath + '/' : '') + search + hash;
+    }
+
+    const targetUrl = getTargetUrl();
+
+    // Redirecionamento suave após breve instante para exibir a logo oficial
+    setTimeout(function() {
+      window.location.replace(targetUrl);
+    }, 450);
   </script>
 </head>
-<body style="background:#050C16;color:#fff;font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;">
-  <p>Redirecionando para <a href="https://jonesbyte.github.io/bd/" style="color:#00F0FF;">Byte Downloader</a>...</p>
+<body>
+  <div class="container">
+    <img 
+      src="https://jonesbyte.github.io/bd/logo-byte-downloader-pagina-de-vendas.png" 
+      alt="Byte Downloader Logo" 
+      class="logo-img"
+    />
+    
+    <h1 class="hero-title" id="h-title">
+      <span>BAIXA. </span><span class="highlight">MELHORA. </span><span>CONVERTE.</span>
+    </h1>
+    
+    <p class="subtitle" id="h-sub">
+      Cole o link, pegue o vídeo, melhore imagem com IA, transcreva fala e deixe tudo pronto no mesmo app.
+    </p>
+
+    <div class="loader-wrap">
+      <div class="spinner"></div>
+      <span class="status-text" id="h-status">Redirecionando para o site oficial...</span>
+    </div>
+
+    <a href="https://jonesbyte.github.io/bd/" class="redirect-btn" id="h-btn">
+      Acessar agora
+    </a>
+
+    <p class="footer-note">
+      &copy; Byte Arte Software — CNPJ: 68.731.745/0001-64
+    </p>
+  </div>
+
+  <script>
+    document.getElementById('h-title').innerHTML = '<span>' + t.title1 + '</span><span class="highlight">' + t.title2 + '</span><span>' + t.title3 + '</span>';
+    document.getElementById('h-sub').textContent = t.subtitle;
+    document.getElementById('h-status').textContent = t.status;
+    const btn = document.getElementById('h-btn');
+    btn.textContent = t.button;
+    btn.href = targetUrl;
+  </script>
 </body>
 </html>
